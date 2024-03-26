@@ -23,9 +23,15 @@
           <span class="block text-sm  text-gray-500 truncate dark:text-gray-400">{{app.user.email}}</span>
         </div>
         <ul class="py-2" aria-labelledby="user-menu-button">
+          {% if is_granted('ROLE_DRIVER') %}
           <li>
             <a href="{{path('app_dashboard')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Dashboard</a>
           </li>
+      {% elseif is_granted('ROLE_USER') %}          
+          <li>
+            <a href="{{path('app_reservation')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mes Réservation</a>
+          </li>
+          {% endif %}
           <li>
             <a href="{{path('app_profile')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Profile</a>
           </li>

@@ -23,14 +23,18 @@ class Reservation
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-
+    #[Assert\Length(min: 5, max: 255 , minMessage: 'L\'adresse de départ doit contenir au moins 5 caractères' , maxMessage: 'L\'adresse de départ doit contenir au maximum 255 caractères')]
     private ?string $depAddress = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
+    #[Assert\Length(min: 5, max: 255 , minMessage: 'L\'adresse de destination doit contenir au moins 5 caractères' , maxMessage: 'L\'adresse de destination doit contenir au maximum 255 caractères')]
+
     private ?string $destination = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
+    
     private ?\DateTimeImmutable $reservation_datetime = null;
 
 
@@ -49,9 +53,7 @@ class Reservation
     private ?Client $client = null;
 
     #[ORM\Column]
-    #[Assert\GreaterThan(0)]
-    #[Assert\LessThan(5)]
-
+    #[Assert\Range(min: 1, max: 4 , notInRangeMessage: 'Le nombre de passagers doit être compris entre 1 et 4')]
     private ?int $nbPassengers = null;
 
 

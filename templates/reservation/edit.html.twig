@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier votre réservation #{{reservation.id}}!{% endblock %}
+
+{% block body %}
+<section class="my-8">
+    <h1 class="text-2xl font-bold text-center my-5">Modifier votre Réservation</h1>
+    <p class="text-lg font-normal text-gray-500 dark:text-gray-400 lg:text-center lg:text-xl lg:px-64 lg:mb-16">
+        
+        Vous pouvez modifier votre réservation ici.
+        </p>
+<main class="max-w-sm mx-auto">
+
+
+{% for message in app.flashes('success') %}
+<div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+    {{ message }}
+</div>
+    
+    
+{% endfor %}
+{{ form_start(form ) }}
+{{ form_row(form.depAddress) }}
+{{ form_row(form.destination) }}
+{{ form_row(form.reservation_datetime) }}
+{{ form_row(form.nbPassengers) }}
+{{form_row(
+    form.submit, {
+        label: 'Modifier',
+    }
+)}}
+{{ form_end(form) }}
+
+
+</main>
+
+</section>
+
+
+
+{% endblock %}

@@ -16,11 +16,17 @@ class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home' , methods: ['GET', 'POST'])]
 
-    public function index(): Response
+    public function index(Request $request): Response
     {
-       
+        $reservation = new Reservation();       
+            
+        $form = $this->createForm(ReservationFormType::class, $reservation);
+        $form->handleRequest($request);
+
+
 
         return $this->render('home/index.html.twig', [ 
+            'form' => $form->createView()
         ]);
     }
 
