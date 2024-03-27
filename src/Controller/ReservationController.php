@@ -6,7 +6,6 @@ use App\Entity\Client;
 use App\Entity\Reservation;
 use App\Form\ReservationFormType;
 use App\Repository\ReservationRepository;
-use App\Twig\ReservationForm;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -36,7 +35,7 @@ class ReservationController extends AbstractController
 
 
     #[Route('/reservation/{id}', name: 'edit_reservation')]
-    public function edit(EntityManagerInterface $manager , Reservation $reservation, PaginatorInterface $paginator, Request $request , #[CurrentUser] Client $client): Response
+    public function edit(EntityManagerInterface $manager , Reservation $reservation, Request $request , #[CurrentUser] Client $client): Response
     {
 
         $form = $this->createForm(ReservationFormType::class, $reservation);
@@ -44,6 +43,8 @@ class ReservationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $manager->flush();
             $this->addFlash('success', 'Votre réservation a été mis à jour avec succès');
+
+
         }
 
         return $this->render('reservation/edit.html.twig', [
@@ -68,4 +69,37 @@ class ReservationController extends AbstractController
         return $this->redirectToRoute('app_reservation');
 
     }
+
+
+    #[Route('/reservation/accepte/{id}', name: 'accepte_reservation')]
+    public function accepte(Reservation $reservation, EntityManagerInterface $manager): Response
+    {
+
+        $reservation->setStatus(Reservation::STATUS_CONFIRMED);
+        $manager->flush();
+
+        return $this->render('reservation/reservationaccepter.html.twig', [
+            'id' => $reservation->getId()
+        ]); 
+
+    }
+
+    #[Route('/reservation/refuse/{id}', name: 'refuse_reservation')]
+    public function refuse(Reservation $reservation, EntityManagerInterface $manager): Response
+    {
+
+        $reservation->setStatus(Reservation::STATUS_CANCELLED);
+        $manager->flush();
+
+        $this->addFlash(
+           'success',
+           'Réservation bien refusée.'
+        );
+
+        return $this->redirectToRoute('app_reservation');
+
+    }
+
+
+
 }
