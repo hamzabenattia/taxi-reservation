@@ -1,0 +1,68 @@
+{# templates/invoice_template.html.twig #}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Facture Invoice</title>
+    <!-- Add your CSS styles here -->
+    <style>
+        /* Example styles */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .invoice {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .invoice-title {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .invoice-item {
+            margin-bottom: 10px;
+        }
+        .invoice-item label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice">
+        <div class="invoice-title">Facture Invoice</div>
+        <div class="invoice-details">
+            <div class="invoice-item">
+                <label>Numéro de facture:</label> {{ invoice.id }}
+            </div>
+            <div class="invoice-item">
+                <label>Date de création:</label> {{ invoice.createdAt|date('d/m/Y') }}
+            </div>
+            <div class="invoice-item">
+                <label>Numéro de Réservation :</label> {{ invoice.reservation}}
+            {% if reservation %}
+
+            <div class="invoice-item">
+                <label>Client:</label> {{ reservation.client.firstName }} {{ reservation.client.lastName }}
+            </div>
+
+            <div class="invoice-item">
+                <label>Addresse de départ:</label> {{ reservation.depAddress }}
+            </div>
+            <div class="invoice-item">
+                <label>Destination:</label> {{ reservation.destination }}
+            </div>
+            
+            {% endif %}
+            
+           
+            <div class="invoice-item">
+                <label>Prix HT:</label> {{ invoice.priceHT  | format_currency('EUR')  }} 
+                <label>Prix TTC:</label> {{ invoice.priceTTC| format_currency('EUR')}}
+
+
+            </div>
+            <!-- Add more invoice details as needed -->
+        </div>
+    </div>
+</body>
+</html>

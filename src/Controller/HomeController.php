@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Entity\Reservation;
 use App\Form\ReservationFormType;
+use App\Repository\DriverRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,8 +21,14 @@ class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home', methods: ['GET', 'POST'])]
 
-    public function index(Request $request): Response
+    public function index(Request $request, DriverRepository $driverRepo): Response
     {
+
+        if ($driverRepo->findAll() == null) {
+           return $this->redirectToRoute('app_driver_register'); 
+        }
+
+
         $reservation = new Reservation();
 
         $form = $this->createForm(ReservationFormType::class, $reservation);

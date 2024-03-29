@@ -21,15 +21,19 @@ class DriverRegistrationFormType extends AbstractType
     {
         $builder
             ->add('firstName', TextType::class, [
-                'label' => 'First Name',
+                'label' => 'Prénom',
             ], ['attr' => ['class' => 'form-control']])
             ->add('lastName', TextType::class, [
-                'label' => 'Last Name',
+                'label' => 'Nom',
             ], ['attr' => ['class' => 'form-control']])
-            ->add('address')
-            ->add('companyName')
+            ->add('address', TextType::class, [
+                'label' => 'Addresse',
+            ], ['attr' => ['class' => 'form-control']])
+            ->add('companyName', TextType::class, [
+                'label' => 'Le nom de la société',
+            ], ['attr' => ['class' => 'form-control']])
             ->add('phoneNumber', TextType::class, [
-                'label' => 'Phone Number',
+                'label' => 'Numéro de téléphone',
             ], ['attr' => ['class' => 'form-control']])
             
 
@@ -47,6 +51,7 @@ class DriverRegistrationFormType extends AbstractType
                                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,
+                'label' => 'Mot de passe',
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
                     new NotBlank([
@@ -61,8 +66,8 @@ class DriverRegistrationFormType extends AbstractType
                 ],
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Register',
-                'attr' => ['class' => 'btn btn-primary'],
+                'label' => 'Créer un compte de chauffeur',
+                'attr' => ['class' => 'w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800'],
             ])
         ;
     }

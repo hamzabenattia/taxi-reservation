@@ -6,7 +6,6 @@ use App\Entity\Client;
 use App\Entity\Reservation;
 use App\Form\ReservationFormType;
 use App\Repository\ReservationRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ReservationController extends AbstractController
 {
@@ -24,7 +24,7 @@ class ReservationController extends AbstractController
         $reservations = $paginator->paginate(
             $repo->findByClient($client), /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
-            10 /*limit per page*/
+            5 /*limit per page*/
         );
 
 
@@ -56,6 +56,7 @@ class ReservationController extends AbstractController
 
     
     #[Route('/reservation/delete/{id}', name: 'delete_reservation')]
+    
     public function delete(EntityManagerInterface $manager , Reservation $reservation, #[CurrentUser] Client $client): Response
     {
 
@@ -72,11 +73,13 @@ class ReservationController extends AbstractController
 
 
     #[Route('/reservation/accepte/{id}', name: 'accepte_reservation')]
+    #[IsGranted('ROLE_DRIVER', message: 'Seuls les chauffeurs peuvent accepter une réservation')]
     public function accepte(Reservation $reservation, EntityManagerInterface $manager): Response
     {
 
         $reservation->setStatus(Reservation::STATUS_CONFIRMED);
         $manager->flush();
+
 
         return $this->render('reservation/reservationaccepter.html.twig', [
             'id' => $reservation->getId()
@@ -85,19 +88,16 @@ class ReservationController extends AbstractController
     }
 
     #[Route('/reservation/refuse/{id}', name: 'refuse_reservation')]
+    #[IsGranted('ROLE_DRIVER', message: 'Seuls les chauffeurs peuvent refuser une réservation')]
     public function refuse(Reservation $reservation, EntityManagerInterface $manager): Response
     {
 
         $reservation->setStatus(Reservation::STATUS_CANCELLED);
         $manager->flush();
 
-        $this->addFlash(
-           'success',
-           'Réservation bien refusée.'
-        );
-
-        return $this->redirectToRoute('app_reservation');
-
+        return $this->render('reservation/reservationRefuser.html.twig', [
+            'id' => $reservation->getId()
+        ]); 
     }
 
 
