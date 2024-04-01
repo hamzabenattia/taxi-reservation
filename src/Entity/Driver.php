@@ -53,6 +53,9 @@ class Driver implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $description = null;
+
 
     #[ORM\PrePersist]
     public function prePersist(){
@@ -223,5 +226,17 @@ class Driver implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString()
     {
         return $this->getEmail();
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
     }
 }

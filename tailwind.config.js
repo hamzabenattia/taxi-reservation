@@ -7,7 +7,6 @@ module.exports = {
     "./templates/**/*.html.twig",
     "./node_modules/flowbite/**/*.js",
     "./vendor/tales-from-a-dev/flowbite-bundle/templates/**/*.html.twig",
-    "./node_modules/tw-elements/js/**/*.js",
 
 
   ],
@@ -56,7 +55,6 @@ module.exports = {
   },
   plugins: [
     require('flowbite/plugin'), // add the flowbite plugin
-    require("tw-elements/plugin.cjs")
 
   ],
 }

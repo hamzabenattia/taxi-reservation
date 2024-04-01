@@ -32,13 +32,13 @@
         <div class="invoice-title">Facture Invoice</div>
         <div class="invoice-details">
             <div class="invoice-item">
-                <label>Numéro de facture:</label> {{ invoice.id }}
+                {# <label>Numéro de facture:</label> {{ invoice.id }} #}
             </div>
             <div class="invoice-item">
-                <label>Date de création:</label> {{ invoice.createdAt|date('d/m/Y') }}
+                {# <label>Date de création:</label> {{ invoice.createdAt|date('d/m/Y') }} #}
             </div>
             <div class="invoice-item">
-                <label>Numéro de Réservation :</label> {{ invoice.reservation}}
+                {# <label>Numéro de Réservation :</label> {{ invoice.reservation}} #}
             {% if reservation %}
 
             <div class="invoice-item">
@@ -56,8 +56,8 @@
             
            
             <div class="invoice-item">
-                <label>Prix HT:</label> {{ invoice.priceHT  | format_currency('EUR')  }} 
-                <label>Prix TTC:</label> {{ invoice.priceTTC| format_currency('EUR')}}
+                {# <label>Prix HT:</label> {{ invoice.priceHT //100 }} $
+                <label>Prix TTC:</label> {{ invoice.priceTTC //100}}$ #}
 
 
             </div>

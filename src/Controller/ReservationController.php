@@ -6,6 +6,7 @@ use App\Entity\Client;
 use App\Entity\Reservation;
 use App\Form\ReservationFormType;
 use App\Repository\ReservationRepository;
+use App\Service\EmailSender;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,8 +18,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ReservationController extends AbstractController
 {
+
+    public function __construct(private EmailSender $emailSender)
+    {
+    }
+
+
     #[Route('/reservation', name: 'app_reservation')]
-    public function index(ReservationRepository $repo , PaginatorInterface $paginator, Request $request , #[CurrentUser] Client $client): Response
+    public function index(ReservationRepository $repo, PaginatorInterface $paginator, Request $request, #[CurrentUser] Client $client): Response
     {
 
         $reservations = $paginator->paginate(
@@ -35,16 +42,18 @@ class ReservationController extends AbstractController
 
 
     #[Route('/reservation/{id}', name: 'edit_reservation')]
-    public function edit(EntityManagerInterface $manager , Reservation $reservation, Request $request , #[CurrentUser] Client $client): Response
+    #[IsGranted('Edit', subject: 'reservation' , message: 'Vous n\'avez pas accès à cette Reservation')]
+    public function edit(EntityManagerInterface $manager, Reservation $reservation, Request $request, #[CurrentUser] Client $client): Response
     {
+
+
+    
 
         $form = $this->createForm(ReservationFormType::class, $reservation);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $manager->flush();
             $this->addFlash('success', 'Votre réservation a été mis à jour avec succès');
-
-
         }
 
         return $this->render('reservation/edit.html.twig', [
@@ -54,21 +63,20 @@ class ReservationController extends AbstractController
     }
 
 
-    
+
     #[Route('/reservation/delete/{id}', name: 'delete_reservation')]
-    
-    public function delete(EntityManagerInterface $manager , Reservation $reservation, #[CurrentUser] Client $client): Response
+
+    public function delete(EntityManagerInterface $manager, Reservation $reservation, #[CurrentUser] Client $client): Response
     {
 
         $manager->remove($reservation);
         $manager->flush();
         $this->addFlash(
-           'success',
-           'Votre réservation a bien été supprimée.'
+            'success',
+            'Votre réservation a bien été supprimée.'
         );
 
         return $this->redirectToRoute('app_reservation');
-
     }
 
 
@@ -80,11 +88,22 @@ class ReservationController extends AbstractController
         $reservation->setStatus(Reservation::STATUS_CONFIRMED);
         $manager->flush();
 
+        $this->emailSender->sendEmail(
+            'noreply@taxi.fr',
+            $reservation->getClient()->getEmail(),
+            'Votre réservation a été acceptée',
+            'emails/client/reservationAccecpter.html.twig',
+            [
+                'reservation' => $reservation
+            ]
+
+
+        );
+
 
         return $this->render('reservation/reservationaccepter.html.twig', [
             'id' => $reservation->getId()
-        ]); 
-
+        ]);
     }
 
     #[Route('/reservation/refuse/{id}', name: 'refuse_reservation')]
@@ -95,11 +114,20 @@ class ReservationController extends AbstractController
         $reservation->setStatus(Reservation::STATUS_CANCELLED);
         $manager->flush();
 
+        $this->emailSender->sendEmail(
+            'noreply@taxi.fr',
+            $reservation->getClient()->getEmail(),
+            'Votre réservation a été refusée',
+            'emails/client/reservationRefuser.html.twig',
+
+            [
+                'reservation' => $reservation
+            ],
+
+        );
+
         return $this->render('reservation/reservationRefuser.html.twig', [
             'id' => $reservation->getId()
-        ]); 
+        ]);
     }
-
-
-
 }

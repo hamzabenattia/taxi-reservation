@@ -22,7 +22,6 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "flowbite": "^2.3.0",
-        "tw-elements": "^2.0.0"
+        "flowbite": "^2.3.0"
     }
 }
