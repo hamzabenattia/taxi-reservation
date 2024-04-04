@@ -42,7 +42,7 @@ class ReservationController extends AbstractController
 
 
     #[Route('/reservation/{id}', name: 'edit_reservation')]
-    #[IsGranted('Edit', subject: 'reservation' , message: 'Vous n\'avez pas accès à cette Reservation')]
+    #[IsGranted('EDIT', subject: 'reservation' , message: 'Vous n\'avez pas accès à cette Reservation')]
     public function edit(EntityManagerInterface $manager, Reservation $reservation, Request $request, #[CurrentUser] Client $client): Response
     {
 
@@ -53,6 +53,7 @@ class ReservationController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $manager->flush();
+
             $this->addFlash('success', 'Votre réservation a été mis à jour avec succès');
         }
 
@@ -65,6 +66,8 @@ class ReservationController extends AbstractController
 
 
     #[Route('/reservation/delete/{id}', name: 'delete_reservation')]
+    #[IsGranted('EDIT', subject: 'reservation' , message: 'Vous n\'avez pas accès à cette Reservation')]
+
 
     public function delete(EntityManagerInterface $manager, Reservation $reservation, #[CurrentUser] Client $client): Response
     {

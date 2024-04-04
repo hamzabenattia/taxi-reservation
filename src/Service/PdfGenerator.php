@@ -3,21 +3,43 @@
 // src/Service/PdfGenerator.php
 namespace App\Service;
 
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use TCPDF;
 
 class PdfGenerator
 {
-    public function generateFacturePdf($htmlTemplate)
+
+    private $params;
+
+    public function __construct(ParameterBagInterface $params) {
+        $this->params = $params;
+    }
+
+
+
+
+    public function generateFacturePdf($htmlTemplate,$entity)
     {
         $pdf = new TCPDF();
         $pdf->AddPage();
-        $pdf->Cell(0, 10, 'Taxi Reservation Invoice', 0, 1, 'C');
-        $pdf->Ln(10);
         // Write facture data to PDF
         $pdf->writeHTML($htmlTemplate);
         // Generate PDF file content
         $pdfContent = $pdf->Output('', 'S');
         
-        return $pdfContent;
+        $pdfDirectory = $this->params->get('kernel.project_dir') . '/public/facture/';
+        $pdfFilename = 'facture_' . $entity->getId() . '.pdf';
+
+    
+        // Save PDF file to the server
+
+        $filesystem = new Filesystem();
+        $filesystem->mkdir($pdfDirectory);
+
+        file_put_contents($pdfDirectory . $pdfFilename, $pdfContent);
+
+        return $pdfFilename;
+
     }
 }

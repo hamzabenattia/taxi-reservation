@@ -7,16 +7,14 @@ use App\Entity\Contact;
 use App\Entity\Reservation;
 use App\Form\ContactType;
 use App\Form\ReservationFormType;
+use App\Repository\ClientRepository;
 use App\Repository\DriverRepository;
+use App\Repository\ReservationRepository;
 use App\Service\EmailSender;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
@@ -33,14 +31,17 @@ class HomeController extends AbstractController
 
     #[Route('/', name: 'app_home', methods: ['GET', 'POST'])]
 
-    public function index(Request $request, DriverRepository $driverRepo): Response
+    public function index(Request $request, DriverRepository $driverRepo, ClientRepository $clientRepo , ReservationRepository $reservationRepo): Response
     {
 
         if ($driverRepo->findAll() == null) {
            return $this->redirectToRoute('app_driver_register'); 
         }
-
-
+        if ($this->isGranted('ROLE_DRIVER'))
+        {
+            return $this->redirectToRoute('app_dashboard');
+        }
+       
         $reservation = new Reservation();
 
         $form = $this->createForm(ReservationFormType::class, $reservation);
@@ -57,7 +58,10 @@ class HomeController extends AbstractController
 
         return $this->render('home/index.html.twig', [
             'form' => $form->createView(),
-            'contactForm' => $contact_form->createView()
+            'contactForm' => $contact_form->createView(),
+            'clientCount' => $clientRepo->count(),
+           'reservationCount' => $reservationRepo->count()
+
         ]);
     }
 

@@ -12,7 +12,7 @@ Encore
     // public path used by the web server to access the output path
     .setPublicPath('/build')
     // only needed for CDN's or subdirectory deploy
-    //.setManifestKeyPrefix('build/')
+    // .setManifestKeyPrefix('build/')
 
     /*
      * ENTRY CONFIG
@@ -71,6 +71,9 @@ Encore
 
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()
+    // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
+.enableStimulusBridge('./assets/controllers.json')
+
 ;
 
 module.exports = Encore.getWebpackConfig();

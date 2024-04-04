@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ReservationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -37,7 +39,6 @@ class Reservation
     
     private ?\DateTimeImmutable $reservation_datetime = null;
 
-
     
     #[ORM\Column]
     private ?string $status = null;
@@ -55,6 +56,9 @@ class Reservation
     #[ORM\Column]
     #[Assert\Range(min: 1, max: 4 , notInRangeMessage: 'Le nombre de passagers doit être compris entre 1 et 4')]
     private ?int $nbPassengers = null;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Facture $facture = null;
 
 
     #[ORM\PrePersist]
@@ -162,6 +166,23 @@ class Reservation
     public function setNbPassengers(int $nbPassengers): static
     {
         $this->nbPassengers = $nbPassengers;
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getId();
+    }
+
+    public function getFacture(): ?Facture
+    {
+        return $this->facture;
+    }
+
+    public function setFacture(?Facture $facture): static
+    {
+        $this->facture = $facture;
 
         return $this;
     }

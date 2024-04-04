@@ -68,16 +68,10 @@ class EasyAdminSubscriber implements EventSubscriberInterface
 
 
         // Generate PDF for the new Facture
-        $pdfContent = $this->pdfGenerator->generateFacturePdf($htmlTemplate);
-        $pdfDirectory = $this->params->get('kernel.project_dir') . '/public/pdf/';
-        $pdfFilename = 'facture_' . $entity->getId() . '.pdf';
+      $this->pdfGenerator->generateFacturePdf($htmlTemplate,$entity);
 
     
-        // Save PDF file to the server
 
-        $filesystem = new Filesystem();
-        $filesystem->mkdir($pdfDirectory);
-
-        file_put_contents($pdfDirectory . $pdfFilename, $pdfContent);
+        
     }
 }

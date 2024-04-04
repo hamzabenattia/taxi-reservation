@@ -6,6 +6,7 @@ use App\Entity\Client;
 use App\Entity\Driver;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -37,7 +38,7 @@ class DriverRegistrationFormType extends AbstractType
             ], ['attr' => ['class' => 'form-control']])
             
 
-            ->add('email')
+            ->add('email',EmailType::class)
 
             ->add('agreeTerms', CheckboxType::class, [
                                 'mapped' => false,

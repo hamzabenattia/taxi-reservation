@@ -25,21 +25,25 @@
         .invoice-item label {
             font-weight: bold;
         }
+        .price{
+            font-weight: bold;
+            align-items: end;
+        }
     </style>
 </head>
 <body>
     <div class="invoice">
-        <div class="invoice-title">Facture Invoice</div>
+        <p>Logo</p>
+        <div class="invoice-title">Facture </div>
         <div class="invoice-details">
             <div class="invoice-item">
-                {# <label>Numéro de facture:</label> {{ invoice.id }} #}
+                <label>Numéro de facture:</label> {{ reservation.facture.id }}
             </div>
             <div class="invoice-item">
-                {# <label>Date de création:</label> {{ invoice.createdAt|date('d/m/Y') }} #}
+                <label>Date de création:</label> {{ reservation.facture.createdAt|date('d/m/Y') }}
             </div>
             <div class="invoice-item">
-                {# <label>Numéro de Réservation :</label> {{ invoice.reservation}} #}
-            {% if reservation %}
+                <label>Numéro de Réservation :</label> {{ reservation.id}}
 
             <div class="invoice-item">
                 <label>Client:</label> {{ reservation.client.firstName }} {{ reservation.client.lastName }}
@@ -51,16 +55,27 @@
             <div class="invoice-item">
                 <label>Destination:</label> {{ reservation.destination }}
             </div>
-            
-            {% endif %}
-            
+                        
            
-            <div class="invoice-item">
-                {# <label>Prix HT:</label> {{ invoice.priceHT //100 }} $
-                <label>Prix TTC:</label> {{ invoice.priceTTC //100}}$ #}
-
+            <div class="price">
+                <label>Prix HT:</label> {{ reservation.facture.priceHT //100 }} $
+            </div>
+            <div class="price">
+                <label>Prix TTC:</label> {{ reservation.facture.priceTTC //100}}$
 
             </div>
+
+
+
+            <div>
+                <small>
+                    Taxi , 1 rue de la paix, 75000 Paris
+                     
+                </small>
+                 
+            </div>
+
+
             <!-- Add more invoice details as needed -->
         </div>
     </div>

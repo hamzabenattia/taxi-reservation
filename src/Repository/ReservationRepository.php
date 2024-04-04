@@ -29,7 +29,7 @@ class ReservationRepository extends ServiceEntityRepository
        return $this->createQueryBuilder('r')
            ->andWhere('r.client = :val')
            ->setParameter('val', $value)
-           ->orderBy('r.id', 'ASC')
+           ->orderBy('r.id', 'DESC')
            ->setMaxResults(10)
            ->getQuery()
            ->getResult()

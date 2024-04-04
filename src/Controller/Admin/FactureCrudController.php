@@ -11,6 +11,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
@@ -25,27 +27,7 @@ use Twig\Environment;
 class FactureCrudController extends AbstractCrudController
 {
 
-    private $pdfGenerator;
-    private $params;
-    private $twig;
-    private $manager;
 
-
-
-
-    public function __construct(PdfGenerator $pdfGenerator ,  ParameterBagInterface $params, Environment $twig , private ReservationRepository $repo ,  EntityManagerInterface $manager)
-    {
-        $this->pdfGenerator = $pdfGenerator;
-        $this->params = $params;
-        $this->twig = $twig;
-        $this->manager = $manager;
-
-    }
-
-  
-
-
-    
     public static function getEntityFqcn(): string
     {
         return Facture::class;
@@ -55,8 +37,12 @@ class FactureCrudController extends AbstractCrudController
     {
         return $actions
             // ...
+            ->remove(Crud::PAGE_INDEX, Action::DELETE)
+            ->add(Crud::PAGE_EDIT, Action::INDEX)
             ->add(Crud::PAGE_NEW, Action::INDEX)
-            ->add(Crud::PAGE_EDIT, Action::INDEX);
+
+            ;
+
 
         }
 
@@ -69,8 +55,9 @@ class FactureCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->onlyOnIndex(),
-            TextField::new('client'),
-            TextField::new('reservation'),
+            AssociationField::new('client'),
+            // TextField::new('reservation'),
+            AssociationField::new('reservation')->autocomplete(),
             MoneyField::new('priceHT')->setCurrency('EUR'),
             MoneyField::new('priceTTC')->setCurrency('EUR'),
         ];

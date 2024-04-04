@@ -1,1 +1,12 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
+
+
+
+
+{% block main %}
+<script src="path/to/chartjs/dist/chart.umd.js"></script>
+
+
+{{ render_chart(chart) }}
+
+{% endblock main %}

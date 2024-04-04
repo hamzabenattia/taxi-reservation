@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Facture;
 use App\Entity\Reservation;
 use App\Repository\ReservationRepository;
+use App\Service\EmailSender;
 use App\Service\PdfGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -33,7 +34,7 @@ class ReservationCrudController extends AbstractCrudController
 
 
 
-    public function __construct(PdfGenerator $pdfGenerator ,  ParameterBagInterface $params, Environment $twig , private ReservationRepository $repo ,  EntityManagerInterface $manager)
+    public function __construct(PdfGenerator $pdfGenerator , private EmailSender $emailSender, ParameterBagInterface $params, Environment $twig , private ReservationRepository $repo ,  EntityManagerInterface $manager)
     {
         $this->pdfGenerator = $pdfGenerator;
         $this->params = $params;
@@ -55,25 +56,39 @@ class ReservationCrudController extends AbstractCrudController
     }
 
 
-    // public function createEntity(string $entityFqcn)
-    // {
-    //     $product = new Reservation();
-    //     $product->getClient($this->getUser());
-
-    //     return $product;
-    // }
-
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         $facture = new Facture();
         $facture->setReservation($entityInstance);
-        $facture->setClient($entityInstance->getClient()->getId());
+        $facture->setClient($entityInstance->getClient());
         $facture->setPriceHT($entityInstance->getPrice());
         $entityInstance->setFacture($facture);
         // $facture->setTVA(20);
         $facture->setPriceTTC($entityInstance->getPrice() * 1.2);
         $entityManager->persist($facture);
         $entityManager->flush();
+
+
+        if ($entityInstance->getStatus() == Reservation::STATUS_CONFIRMED) {
+            $this->emailSender->sendEmail(
+                $this->params->get('emailAddress'),
+                $entityInstance->getClient()->getEmail(),
+                'Votre réservation a été acceptée',
+                'emails/client/reservationAccecpter.html.twig',
+                [
+                   'reservation' => $entityInstance
+                ]
+            );
+        } elseif ($entityInstance->getStatus() == Reservation::STATUS_CANCELLED) {
+            $this->emailSender->sendEmail(   $this->params->get('emailAddress'),
+             $entityInstance->getClient()->getEmail(), 
+             'Votre réservation a été refusée',
+              'emails/client/reservationRefuser.html.twig',
+               ['reservation' => $entityInstance]
+            );
+        }
+
+
 
 
 
@@ -88,18 +103,15 @@ class ReservationCrudController extends AbstractCrudController
 
 
         // Generate PDF for the new Facture
-        $pdfContent = $this->pdfGenerator->generateFacturePdf($htmlTemplate);
-        $pdfDirectory = $this->params->get('kernel.project_dir') . '/public/pdf/';
-        $pdfFilename = 'facture_' . $facture->getId() . '.pdf';
+       $factureName = $this->pdfGenerator->generateFacturePdf($htmlTemplate,$facture);
 
-    
-        // Save PDF file to the server
 
-        $filesystem = new Filesystem();
-        $filesystem->mkdir($pdfDirectory);
+       $facture ->setName($factureName);
+       $entityManager->persist($facture);
+       $entityManager->flush();
 
-        file_put_contents($pdfDirectory . $pdfFilename, $pdfContent);
 
+       
 
     }
     
@@ -108,9 +120,9 @@ class ReservationCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
 
-        // $viewInvoice = Action::new('Facture')
-        // ->displayIf(fn ($entity) => $entity->getStatus() === Reservation::STATUS_CONFIRMED)
-        // ->linkToUrl(fn ($entity)=> $this->params->get('kernel.project_dir') . '/public/pdf/' . 'facture_' . $entity-> . '.pdf');
+        $viewInvoice = Action::new('Facture')
+        ->displayIf(fn ($entity) => $entity->getStatus() === Reservation::STATUS_CONFIRMED)
+        ->linkToUrl(fn ($entity) => 'facture/'.$entity->getFacture()->getName());
             
 
 
@@ -118,8 +130,8 @@ class ReservationCrudController extends AbstractCrudController
             // ...
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
             ->add(Crud::PAGE_EDIT, Action::INDEX)
-            ->remove(Crud::PAGE_INDEX, Action::NEW);
-            // ->add(Crud::PAGE_INDEX, $viewInvoice);
+            ->remove(Crud::PAGE_INDEX, Action::NEW)
+            ->add(Crud::PAGE_INDEX, $viewInvoice);
 
 
           

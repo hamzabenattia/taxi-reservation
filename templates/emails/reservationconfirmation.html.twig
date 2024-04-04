@@ -304,7 +304,7 @@ img,p{margin:0;Margin:0;font-family:Albert Sans,BlinkMacSystemFont,Segoe UI,Helv
 <table role="presentation" cellpadding="0" cellspacing="0" align="left" valign="top" width="300"><tr><td width="300" valign="top"><![endif]-->
 <div class="t79" style="display:inline-table;text-align:initial;vertical-align:inherit;width:100%;max-width:480px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="t78"><tr>
-<td class="t77" style="overflow:hidden;background-color:#0AD16E;text-align:center;line-height:44px;mso-line-height-rule:exactly;mso-text-raise:10px;border-radius:44px 44px 44px 44px;"><a href="https://127.0.0.1:8000/reservation/accepte/{{id}}" class="t76" style="display:block;margin:0;Margin:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:44px;font-weight:800;font-style:normal;font-size:12px;text-decoration:none;text-transform:uppercase;letter-spacing:2.4px;direction:ltr;color:#F8F8F8;text-align:center;mso-line-height-rule:exactly;mso-text-raise:10px;">Accepter</a></td>
+<td class="t77" style="overflow:hidden;background-color:#0AD16E;text-align:center;line-height:44px;mso-line-height-rule:exactly;mso-text-raise:10px;border-radius:44px 44px 44px 44px;"><a href="{{ url('accepte_reservation', {id: id}) }}" class="t76" style="display:block;margin:0;Margin:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:44px;font-weight:800;font-style:normal;font-size:12px;text-decoration:none;text-transform:uppercase;letter-spacing:2.4px;direction:ltr;color:#F8F8F8;text-align:center;mso-line-height-rule:exactly;mso-text-raise:10px;">Accepter</a></td>
 </tr></table>
 </div>
 <!--[if mso]>
@@ -323,7 +323,7 @@ img,p{margin:0;Margin:0;font-family:Albert Sans,BlinkMacSystemFont,Segoe UI,Helv
 <!--[if !mso]><!--><td class="t84" style="background-color:#ED2828;overflow:hidden;width:480px;text-align:center;line-height:44px;mso-line-height-rule:exactly;mso-text-raise:10px;border-radius:44px 44px 44px 44px;">
 <!--<![endif]-->
 <!--[if mso]><td class="t84" style="background-color:#ED2828;overflow:hidden;width:480px;text-align:center;line-height:44px;mso-line-height-rule:exactly;mso-text-raise:10px;border-radius:44px 44px 44px 44px;"><![endif]-->
-<a href="https://127.0.0.1:8000/reservation/refuse/{{id}}" class="t83" style="display:block;margin:0;Margin:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:44px;font-weight:800;font-style:normal;font-size:12px;text-decoration:none;text-transform:uppercase;letter-spacing:2.4px;direction:ltr;color:#F8F8F8;text-align:center;mso-line-height-rule:exactly;mso-text-raise:10px;">Refuser</a></td>
+<a href="{{ url('refuse_reservation', {id: id}) }}" class="t83" style="display:block;margin:0;Margin:0;font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif,'Albert Sans';line-height:44px;font-weight:800;font-style:normal;font-size:12px;text-decoration:none;text-transform:uppercase;letter-spacing:2.4px;direction:ltr;color:#F8F8F8;text-align:center;mso-line-height-rule:exactly;mso-text-raise:10px;">Refuser</a></td>
 </tr></table>
 </td></tr></table></td>
 </tr></table>

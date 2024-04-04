@@ -15,12 +15,6 @@ class Facture
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $client = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $reservation = null;
-
     #[ORM\Column()]
     private ?float $priceHT = null;
 
@@ -29,6 +23,16 @@ class Facture
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(length: 255,nullable: true)]
+    private ?string $name = null;
+
+
+    #[ORM\ManyToOne(inversedBy: 'factures')]
+    private ?Client $client = null;
+
+    #[ORM\ManyToOne(inversedBy: 'factures')]
+    private ?Reservation $reservation = null;
 
 
     #[ORM\PrePersist]
@@ -42,29 +46,7 @@ class Facture
         return $this->id;
     }
 
-    public function getClient(): ?string
-    {
-        return $this->client;
-    }
 
-    public function setClient(string $client): static
-    {
-        $this->client = $client;
-
-        return $this;
-    }
-
-    public function getReservation(): ?string
-    {
-        return $this->reservation;
-    }
-
-    public function setReservation(string $reservation): static
-    {
-        $this->reservation = $reservation;
-
-        return $this;
-    }
 
     public function getPriceHT(): ?float
     {
@@ -105,5 +87,41 @@ class Facture
     public function __toString(): string
     {
         return $this->id;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): static
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    public function getReservation(): ?Reservation
+    {
+        return $this->reservation;
+    }
+
+    public function setReservation(?Reservation $reservation): static
+    {
+        $this->reservation = $reservation;
+
+        return $this;
     }
 }
