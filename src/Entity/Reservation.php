@@ -57,7 +57,7 @@ class Reservation
     #[Assert\Range(min: 1, max: 4 , notInRangeMessage: 'Le nombre de passagers doit être compris entre 1 et 4')]
     private ?int $nbPassengers = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'reservation', cascade: ['persist', 'remove'])]
     private ?Facture $facture = null;
 
 

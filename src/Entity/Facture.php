@@ -31,8 +31,10 @@ class Facture
     #[ORM\ManyToOne(inversedBy: 'factures')]
     private ?Client $client = null;
 
-    #[ORM\ManyToOne(inversedBy: 'factures')]
+    #[ORM\OneToOne(mappedBy: 'facture', cascade: ['persist', 'remove'])]
     private ?Reservation $reservation = null;
+
+
 
 
     #[ORM\PrePersist]
@@ -120,8 +122,19 @@ class Facture
 
     public function setReservation(?Reservation $reservation): static
     {
+        // unset the owning side of the relation if necessary
+        if ($reservation === null && $this->reservation !== null) {
+            $this->reservation->setFacture(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($reservation !== null && $reservation->getFacture() !== $this) {
+            $reservation->setFacture($this);
+        }
+
         $this->reservation = $reservation;
 
         return $this;
     }
+
 }
