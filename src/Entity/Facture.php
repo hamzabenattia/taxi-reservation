@@ -41,6 +41,7 @@ class Facture
     public function prePersist(): void
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->priceHT = $this->PriceTTC/ 1.2;
     }
 
     public function getId(): ?int
