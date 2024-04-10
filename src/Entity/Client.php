@@ -276,7 +276,7 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __toString()
     {
-        return $this->getEmail();
+        return $this->firstName.' '.$this->lastName;
     }
 
     /**

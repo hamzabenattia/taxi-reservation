@@ -8,6 +8,7 @@ use App\Form\ReservationFormType;
 use App\Repository\ReservationRepository;
 use App\Service\EmailSender;
 use Doctrine\ORM\EntityManagerInterface;
+use Google_Client;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -90,6 +91,12 @@ class ReservationController extends AbstractController
 
         $reservation->setStatus(Reservation::STATUS_CONFIRMED);
         $manager->flush();
+
+
+        $client = new Google_Client();
+        $client->setApplicationName('Google Calendar API PHP Quickstart');
+        $client->setDeveloperKey("AIzaSyCT-plB_attfEphA8yoLNBPumcnAw65R38");
+
 
         $this->emailSender->sendEmail(
             'noreply@taxi.fr',
