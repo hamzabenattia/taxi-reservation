@@ -9,6 +9,9 @@ runtime:
         - sodium
         - ctype
         - iconv
+
+relationships:
+    mariadb:
         
 
 #variables:
