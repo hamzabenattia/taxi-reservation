@@ -11,7 +11,7 @@ runtime:
         - iconv
 
 relationships:
-    mariadb:
+    database:
         
 
 #variables:
