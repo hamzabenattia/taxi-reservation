@@ -1,6 +1,6 @@
 
 database:
-    type: MariaDB:10.11.2
+    type: MariaDB:10.11
     disk: 1024
 
 
