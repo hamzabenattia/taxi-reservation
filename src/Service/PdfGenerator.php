@@ -42,7 +42,7 @@ class PdfGenerator
 
         file_put_contents($pdfDirectory . $pdfFilename, $pdfContent);
 
-        $this->logger->info('Facture PDF generated: ' . $pdfDirectory . $pdfFilename);
+        $this->logger->debug('Facture PDF generated: ' . $pdfDirectory . $pdfFilename);
 
         return $pdfFilename;
 

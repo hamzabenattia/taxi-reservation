@@ -74,7 +74,7 @@ class EasyAdminSubscriber implements EventSubscriberInterface
 
 
         // Generate PDF for the new Facture
-        $this->logger->info('odf pas encore generer');
+        $this->logger->debug('odf pas encore generer');
 
 
       $this->pdfGenerator->generateFacturePdf($htmlTemplate,$entity);
