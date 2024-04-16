@@ -83,7 +83,7 @@ class ReservationCrudController extends AbstractCrudController
                 $this->params->get('emailAddress'),
                 $entityInstance->getClient()->getEmail(),
                 'Votre réservation a été acceptée',
-                'emails/client/reservationAccecpter.html.twig',
+                'emails/Client/reservationAccecpter.html.twig',
                 [
                     'reservation' => $entityInstance
                 ]
@@ -93,7 +93,7 @@ class ReservationCrudController extends AbstractCrudController
                 $this->params->get('emailAddress'),
                 $entityInstance->getClient()->getEmail(),
                 'Votre réservation a été refusée',
-                'emails/client/reservationRefuser.html.twig',
+                'emails/Client/reservationRefuser.html.twig',
                 ['reservation' => $entityInstance]
             );
         }
@@ -104,7 +104,6 @@ class ReservationCrudController extends AbstractCrudController
         $htmlTemplate = $this->twig->render('pdf/invoice_template.html.twig', [
             'invoice' => $facture,
             'reservation' => $entityInstance,
-
         ]);
 
 
