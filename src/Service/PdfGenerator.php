@@ -3,6 +3,7 @@
 // src/Service/PdfGenerator.php
 namespace App\Service;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use TCPDF;
@@ -11,9 +12,11 @@ class PdfGenerator
 {
 
     private $params;
+    private $logger;
 
-    public function __construct(ParameterBagInterface $params) {
+    public function __construct(ParameterBagInterface $params , LoggerInterface $logger) {
         $this->params = $params;
+        $this->logger = $logger;
     }
 
 
@@ -38,6 +41,8 @@ class PdfGenerator
         $filesystem->mkdir($pdfDirectory);
 
         file_put_contents($pdfDirectory . $pdfFilename, $pdfContent);
+
+        $this->logger->info('Facture PDF generated: ' . $pdfDirectory . $pdfFilename);
 
         return $pdfFilename;
 

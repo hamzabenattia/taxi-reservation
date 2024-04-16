@@ -9,6 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use App\Service\PdfGenerator;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Twig\Environment;
@@ -19,16 +20,21 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     private $params;
     private $twig;
     private $manager;
+    private $logger;
 
 
 
 
-    public function __construct(PdfGenerator $pdfGenerator ,  ParameterBagInterface $params, Environment $twig , private ReservationRepository $repo ,  EntityManagerInterface $manager)
+    public function __construct(PdfGenerator $pdfGenerator , 
+    LoggerInterface $logger,
+    ParameterBagInterface $params, Environment $twig , private ReservationRepository $repo ,  EntityManagerInterface $manager)
     {
         $this->pdfGenerator = $pdfGenerator;
         $this->params = $params;
         $this->twig = $twig;
         $this->manager = $manager;
+        $this->logger = $logger;
+
 
     }
 
@@ -68,6 +74,9 @@ class EasyAdminSubscriber implements EventSubscriberInterface
 
 
         // Generate PDF for the new Facture
+        $this->logger->info('odf pas encore generer');
+
+
       $this->pdfGenerator->generateFacturePdf($htmlTemplate,$entity);
 
     
