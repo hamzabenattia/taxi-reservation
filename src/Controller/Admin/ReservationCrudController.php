@@ -123,7 +123,7 @@ class ReservationCrudController extends AbstractCrudController
     {
 
         $viewInvoice = Action::new('Facture')
-            ->displayIf(fn ($entity) => $entity->getStatus() === Reservation::STATUS_CONFIRMED)
+            ->displayIf(fn ($entity) => $entity->getFacture() !== null)
             ->linkToUrl(fn ($entity) => 'facture/' . $entity->getFacture()->getName());
 
 
