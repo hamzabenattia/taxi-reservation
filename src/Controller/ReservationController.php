@@ -93,22 +93,18 @@ class ReservationController extends AbstractController
         $manager->flush();
 
 
-        $client = new Google_Client();
-        $client->setApplicationName('Google Calendar API PHP Quickstart');
-        $client->setDeveloperKey("AIzaSyCT-plB_attfEphA8yoLNBPumcnAw65R38");
+
+        // $this->emailSender->sendEmail(
+        //     'noreply@taxi.fr',
+        //     $reservation->getClient()->getEmail(),
+        //     'Votre réservation a été acceptée',
+        //     'emails/client/reservationAccecpter.html.twig',
+        //     [
+        //         'reservation' => $reservation
+        //     ]
 
 
-        $this->emailSender->sendEmail(
-            'noreply@taxi.fr',
-            $reservation->getClient()->getEmail(),
-            'Votre réservation a été acceptée',
-            'emails/client/reservationAccecpter.html.twig',
-            [
-                'reservation' => $reservation
-            ]
-
-
-        );
+        // );
 
 
         return $this->render('reservation/reservationaccepter.html.twig', [
