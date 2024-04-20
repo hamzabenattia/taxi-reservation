@@ -11,7 +11,7 @@ runtime:
         - iconv
 
 relationships:
-    database:
+    database2:
         
 
 #variables:
