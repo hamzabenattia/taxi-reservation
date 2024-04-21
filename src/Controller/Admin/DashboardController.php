@@ -61,7 +61,9 @@ class DashboardController extends AbstractDashboardController
 
             // you can use any type of menu item, except submenus
             ->addMenuItems([
-                MenuItem::linkToCrud('Profile', 'fa fa-id-card',Driver::class)->setEntityId(1)->setAction(Action::EDIT)
+                MenuItem::linkToCrud('Profile', 'fa fa-id-card',Driver::class)->setEntityId(
+                    $user->getId()
+                )->setAction(Action::EDIT)
             ]);
     }
 
@@ -72,6 +74,9 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Reservation', 'fas fa-taxi', Reservation::class);
         yield MenuItem::linkToCrud('Facture', 'fas fa-file-invoice', Facture::class);
         yield MenuItem::linkToCrud('Messages', 'fas fa-sms', Contact::class);
+        yield MenuItem::linkToCrud('Profile', 'fa fa-id-card',Driver::class)->setEntityId(
+            $this->getUser()->getId()
+        )->setAction(Action::EDIT);
         yield MenuItem::linkToLogout('Se déconnecter', 'fa fa-fw fa-sign-out');
 
 

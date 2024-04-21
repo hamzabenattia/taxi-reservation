@@ -1,5 +1,5 @@
 
-database2:
+database:
     type: mariadb:10.11
     disk: 256
 

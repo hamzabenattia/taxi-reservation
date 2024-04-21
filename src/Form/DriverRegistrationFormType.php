@@ -28,7 +28,7 @@ class DriverRegistrationFormType extends AbstractType
                 'label' => 'Nom',
             ], ['attr' => ['class' => 'form-control']])
             ->add('address', TextType::class, [
-                'label' => 'Addresse',
+                'label' => 'Addresse postal',
             ], ['attr' => ['class' => 'form-control']])
             ->add('companyName', TextType::class, [
                 'label' => 'Le nom de la société',
@@ -40,14 +40,7 @@ class DriverRegistrationFormType extends AbstractType
 
             ->add('email',EmailType::class)
 
-            ->add('agreeTerms', CheckboxType::class, [
-                                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
-                ],
-            ])
+          
             ->add('plainPassword', PasswordType::class, [
                                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
@@ -66,6 +59,15 @@ class DriverRegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
+            ->add('agreeTerms', CheckboxType::class, [
+                'mapped' => false,
+                'label' => 'Accepter les termes',
+'constraints' => [
+    new IsTrue([
+        'message' => 'You should agree to our terms.',
+    ]),
+],
+])
             ->add('submit', SubmitType::class, [
                 'label' => 'Créer un compte de chauffeur',
                 'attr' => ['class' => 'w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800'],
